@@ -13,8 +13,8 @@ const Sidebar = ({ onLogout }) => {
   };
 
   return (
-    <Sider width={200} collapsible collapsed={collapsed} trigger={null} style={{ backgroundColor: '#001529', height: '100%' }}>
-      <Space direction="vertical" style={{ width: '100%', textAlign: 'center', marginTop: 20 }}>
+    <Sider width={200}  collapsible collapsed={collapsed} trigger={null} style={{ backgroundColor: '#001529', height: '100%' }}>
+      <Space direction="vertical" style={{ width: '100%', textAlign: 'center', marginTop: 20, height : '100%' }}>
         {collapsed ? (
           <Tooltip title="Expand Sidebar">
             <MenuUnfoldOutlined onClick={handleToggleCollapse} style={{ fontSize: 20, color: '#fff', cursor: 'pointer' }} />
@@ -28,6 +28,7 @@ const Sidebar = ({ onLogout }) => {
           <Tooltip title="User Profile">
             <Menu.Item key="2" icon={<UserOutlined />} style={{ marginTop: 'auto' }} />
           </Tooltip>
+          <div style={{paddingTop : '85vh'}}/>
           <Tooltip title="Logout">
             <Menu.Item key="1" onClick={onLogout} icon={<LogoutOutlined />} style={{ marginBottom: 'auto' }} />
           </Tooltip>

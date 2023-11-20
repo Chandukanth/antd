@@ -1,8 +1,8 @@
 // AuthForm.js
 import React, { useState } from 'react';
 import { Form, Input, Button, Card, Typography, Space, Tooltip, message, Layout } from 'antd';
-import { MailOutlined, LockOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import Sidebar from './sidebar'
+import { MailOutlined, LockOutlined, InfoCircleOutlined, UserOutlined } from '@ant-design/icons';
+import { useNavigate } from "react-router-dom";
 
 const { Title, Text } = Typography;
 const { Header, Content } = Layout;
@@ -10,24 +10,24 @@ const { Header, Content } = Layout;
 const AuthForm = () => {
   const [isSignup, setIsSignup] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+  const navigation = useNavigate()
   const handleToggle = () => {
     setIsSignup(!isSignup);
   };
 
   const handleLogin = () => {
-    setIsLoggedIn(true);
+    navigation('/Home')
+    message.success('Login Successful 😄');
   };
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    message.success('Logout successful!');
-  };
+
 
   const handleSubmit = (values) => {
     if (isSignup) {
       localStorage.setItem('userEmail', values.email);
       localStorage.setItem('userPassword', values.password);
+      localStorage.setItem('user', values.name);
+
       message.success('Sign Up Successful!');
     } else {
       const storedEmail = localStorage.getItem('userEmail');
@@ -42,19 +42,25 @@ const AuthForm = () => {
 
   return (
     <Layout>
-      {!isLoggedIn ? (
-        <Card style={{ width: 600, margin: 'auto', marginTop: 100, padding: 20, boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
-          <Title level={2} style={{ marginBottom: 20, textAlign: 'center', color: '#1890ff' }}>
-            {isSignup ? 'Sign Up' : 'Sign In'}
-          </Title>
-          <Form onFinish={handleSubmit}>
-            <Form.Item name="email" label="Email" rules={[{ required: true, type: 'email', message: 'Please enter a valid email' }]}>
-              <Input prefix={<MailOutlined />} placeholder="Email" />
+
+      <Card style={{ width: 600, margin: 'auto', marginTop: 100, padding: 20, boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+        <Title level={2} style={{ marginBottom: 20, textAlign: 'center', color: '#1890ff' }}>
+          {isSignup ? 'Sign Up' : 'Sign In'}
+        </Title>
+        <Form onFinish={handleSubmit}>
+          {isSignup && (
+            <Form.Item name="name" label="UserName" rules={[{ required: true, type: 'name', message: 'Please enter a name' }]}>
+              <Input prefix={<UserOutlined />} placeholder="Full name" />
             </Form.Item>
-            <Form.Item name="password" label="Password" rules={[{ required: true, message: 'Please enter your password' }]}>
-              <Input.Password prefix={<LockOutlined />} placeholder="Password" />
-            </Form.Item>
-            {isSignup && (
+          )}
+          <Form.Item name="email" label="Email" rules={[{ required: true, type: 'email', message: 'Please enter a valid email' }]}>
+            <Input prefix={<MailOutlined />} placeholder="Email" />
+          </Form.Item>
+          <Form.Item name="password" label="Password" rules={[{ required: true, message: 'Please enter your password' }]}>
+            <Input.Password prefix={<LockOutlined />} placeholder="Password" />
+          </Form.Item>
+          {isSignup && (
+            <>
               <Form.Item
                 name="confirmPassword"
                 label="Confirm Password"
@@ -62,48 +68,35 @@ const AuthForm = () => {
               >
                 <Input.Password prefix={<LockOutlined />} placeholder="Confirm Password" />
               </Form.Item>
-            )}
-            <Form.Item>
-              <Button type="primary" htmlType="submit" style={{ width: '100%', backgroundColor: '#1890ff', borderColor: '#1890ff' }}>
-                {isSignup ? 'Sign Up' : 'Sign In'}
-              </Button>
-            </Form.Item>
-            <Form.Item>
-              <Space>
-                Or
-                <Tooltip title={isSignup ? 'Switch to Sign In' : 'Switch to Sign Up'}>
-                  <Button type="link" onClick={handleToggle} style={{ color: '#1890ff' }}>
-                    {isSignup ? 'Sign In' : 'Sign Up'}
-                  </Button>
-                </Tooltip>
-              </Space>
-            </Form.Item>
-          </Form>
-          <div style={{ textAlign: 'center', marginTop: 10 }}>
-            <Text type="secondary">
-              <InfoCircleOutlined /> Use a valid email and a strong password.
-            </Text>
-          </div>
-        </Card>
-      ) : (
-        <Layout style={{ height: '100%' }}>
-          <Sidebar onLogout={handleLogout} />
-          <Layout>
-            <Header style={{ backgroundColor: '#fff', padding: 10 }}>
-              <Space>
-                <Text strong>Welcome, User!</Text>
-                <span role="img" aria-label="Happy Face" style={{ fontSize: 24 }}>
-                  😄
-                </span>
-              </Space>
-            </Header>
-            <Content style={{ padding: 24 }}>
-              {/* Your main content goes here */}
-              <div>Main Content</div>
-            </Content>
-          </Layout>
-        </Layout>
-      )}
+
+
+            </>
+          )}
+          <Form.Item>
+            <Button type="primary" htmlType="submit" style={{ width: '100%', backgroundColor: '#1890ff', borderColor: '#1890ff' }}>
+              {isSignup ? 'Sign Up' : 'Sign In'}
+            </Button>
+          </Form.Item>
+          <Form.Item>
+            <Space>
+              Or
+              <Tooltip title={isSignup ? 'Switch to Sign In' : 'Switch to Sign Up'}>
+                <Button type="link" onClick={handleToggle} style={{ color: '#1890ff' }}>
+                  {isSignup ? 'Sign In' : 'Sign Up'}
+                </Button>
+              </Tooltip>
+            </Space>
+          </Form.Item>
+        </Form>
+        <div style={{ textAlign: 'center', marginTop: 10 }}>
+          <Text type="secondary">
+            <InfoCircleOutlined /> Use a valid email and a strong password.
+          </Text>
+        </div>
+      </Card>
+
+
+
     </Layout>
   );
 };
