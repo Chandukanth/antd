@@ -1,5 +1,5 @@
 // AuthForm.js
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Input, Button, Card, Typography, Space, Tooltip, message, Layout } from 'antd';
 import { MailOutlined, LockOutlined, InfoCircleOutlined, UserOutlined } from '@ant-design/icons';
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,7 @@ const { Header, Content } = Layout;
 const AuthForm = () => {
   const [isSignup, setIsSignup] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [cardWidth, setCardWidth] = useState('50%');
   const navigation = useNavigate()
   const handleToggle = () => {
     setIsSignup(!isSignup);
@@ -21,7 +22,24 @@ const AuthForm = () => {
   };
 
 
+  useEffect(() => {
+    const handleResize = () => {
+      // Adjust the width based on the window width
+      const width = window.innerWidth > 768 ? '50%' : '90%';
+      setCardWidth(width);
+    };
 
+    // Add event listener for window resize
+    window.addEventListener('resize', handleResize);
+
+    // Initial call to set the initial width
+    handleResize();
+
+    // Clean up the event listener on component unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   const handleSubmit = (values) => {
     if (isSignup) {
       localStorage.setItem('userEmail', values.email);
@@ -43,7 +61,7 @@ const AuthForm = () => {
   return (
     <Layout>
 
-      <Card style={{ width: 600, margin: 'auto', marginTop: 100, padding: 20, boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+      <Card style={{ width: cardWidth, margin: 'auto', marginTop: 100, padding: 20, boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
         <Title level={2} style={{ marginBottom: 20, textAlign: 'center', color: '#1890ff' }}>
           {isSignup ? 'Sign Up' : 'Sign In'}
         </Title>

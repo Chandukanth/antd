@@ -9,6 +9,15 @@ body{
   height: 40vmin;
   pointer-events: none;
 }
+/* Add this to your global styles or component-specific styles */
+@media (max-width: 768px) {
+  .responsive-card {
+    width: 90%; /* Adjust as needed for your design */
+  }
+}
+.responsive-card {
+  width: 50%; /* Adjust as needed for your design */
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
