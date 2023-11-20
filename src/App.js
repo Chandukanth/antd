@@ -1,6 +1,7 @@
 // src/App.js
 import React from "react";
 import {
+  HashRouter,
   BrowserRouter as Router,
   Routes,
   Route,
@@ -11,13 +12,13 @@ import Photos from "./views";
 
 function App() {
   return (
-    <Router>
+    <HashRouter basename="/">
       <Routes>
         <Route path="/" element={<AuthForm />} />
         <Route path="/Home" element={<Photos />} />
         
       </Routes>
-    </Router>
+   </HashRouter>
   );
 }
 
