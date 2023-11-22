@@ -9,6 +9,7 @@ import {
 import AuthForm from "./views/authform";
 import "./App.css"
 import Photos from "./views";
+import UserProfileScreen from "./views/profile";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <Routes>
         <Route path="/" element={<AuthForm />} />
         <Route path="/Home" element={<Photos />} />
+        <Route path="/Home/profile" element={<UserProfileScreen />} />
         
       </Routes>
    </HashRouter>

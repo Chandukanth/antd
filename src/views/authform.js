@@ -11,9 +11,13 @@ const AuthForm = () => {
   const [isSignup, setIsSignup] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cardWidth, setCardWidth] = useState('50%');
+  const [isFlipped, setIsFlipped] = useState(false);
   const navigation = useNavigate()
+
+
   const handleToggle = () => {
     setIsSignup(!isSignup);
+    setIsFlipped(!isFlipped);
   };
 
   const handleLogin = () => {
@@ -42,11 +46,15 @@ const AuthForm = () => {
   }, []);
   const handleSubmit = (values) => {
     if (isSignup) {
+      if(values.password !== values.confirmPassword){
+        return(message.warning("Password doesn't match"))
+      }
       localStorage.setItem('userEmail', values.email);
       localStorage.setItem('userPassword', values.password);
       localStorage.setItem('user', values.name);
 
       message.success('Sign Up Successful!');
+      setIsSignup(!isSignup);
     } else {
       const storedEmail = localStorage.getItem('userEmail');
       const storedPassword = localStorage.getItem('userPassword');
@@ -61,33 +69,48 @@ const AuthForm = () => {
   return (
     <Layout>
 
-      <Card style={{ width: cardWidth, margin: 'auto', marginTop: 100, padding: 20, boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
-        <Title level={2} style={{ marginBottom: 20, textAlign: 'center', color: '#1890ff' }}>
+      <Card
+        className={`auth-card ${isFlipped ? 'flipped' : ''}`}
+        style={{
+          width: cardWidth,
+          margin: 'auto',
+          marginTop: 100,
+          padding: 20,
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+        }}
+      >        <Title level={2} style={{ marginBottom: 20, textAlign: 'center', color: '#1890ff' }}>
           {isSignup ? 'Sign Up' : 'Sign In'}
         </Title>
         <Form onFinish={handleSubmit}>
           {isSignup && (
-            <Form.Item name="name" label="UserName" rules={[{ required: true, type: 'name', message: 'Please enter a name' }]}>
+            <Form.Item
+              name="name"
+
+              rules={[
+                {
+                  required: true,
+                  message: 'Please enter a name',
+                },
+              ]}
+            >
               <Input prefix={<UserOutlined />} placeholder="Full name" />
             </Form.Item>
           )}
-          <Form.Item name="email" label="Email" rules={[{ required: true, type: 'email', message: 'Please enter a valid email' }]}>
+          <Form.Item name="email" rules={[{ required: true, type: 'email', message: 'Please enter a valid email' }]}>
             <Input prefix={<MailOutlined />} placeholder="Email" />
           </Form.Item>
-          <Form.Item name="password" label="Password" rules={[{ required: true, message: 'Please enter your password' }]}>
+          <Form.Item name="password" rules={[{ required: true, message: 'Please enter your password' }]}>
             <Input.Password prefix={<LockOutlined />} placeholder="Password" />
           </Form.Item>
           {isSignup && (
             <>
               <Form.Item
                 name="confirmPassword"
-                label="Confirm Password"
+
                 rules={[{ required: true, message: 'Please confirm your password' }]}
               >
                 <Input.Password prefix={<LockOutlined />} placeholder="Confirm Password" />
               </Form.Item>
-
-
             </>
           )}
           <Form.Item>
@@ -95,12 +118,12 @@ const AuthForm = () => {
               {isSignup ? 'Sign Up' : 'Sign In'}
             </Button>
           </Form.Item>
-          <Form.Item>
+          <Form.Item style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Space>
-              Or
+
               <Tooltip title={isSignup ? 'Switch to Sign In' : 'Switch to Sign Up'}>
-                <Button type="link" onClick={handleToggle} style={{ color: '#1890ff' }}>
-                  {isSignup ? 'Sign In' : 'Sign Up'}
+                <Button onClick={handleToggle} style={{ color: '#1890ff' }}>
+                  {isSignup ? "Already Have Account? Sign In" : "Don't have account? Sign Up"}
                 </Button>
               </Tooltip>
             </Space>

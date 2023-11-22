@@ -1,8 +1,14 @@
 .App {
   text-align: center;
 }
-body{
-  overflow: hidden;
+
+.auth-card {
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.auth-card.flipped {
+  transform: rotateX(360deg);
 }
 
 .App-logo {
